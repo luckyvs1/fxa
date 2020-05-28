@@ -24,6 +24,7 @@ This log lists the architectural decisions for FxA.
 - [ADR-0017](../adr0017-switch-settings-auth-to-sessiontoken.md) - Switch from OAuth2 to sharing sessionToken with GraphQL server for settings redesign auth
 - [ADR-0018](../adr0018-use-tailwind-with-custom-scss.md) - Use Utility-First CSS (Tailwind) with Custom SCSS
 - [ADR-0019](../adr0019-use-workspace-dependencies.md) - Use workspace dependencies in package.json
+- [ADR-0020](../adr0020-deprecate-hawk.md) - Deprecate Hawk authentication on fxa-auth-server
 
 <!-- adrlogstop -->
 
