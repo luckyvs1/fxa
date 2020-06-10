@@ -613,6 +613,10 @@ module.exports = (
           throw error.yourPrimaryEmailExists();
         }
 
+        if (emailsMatch(account.email, email)) {
+          throw error.yourPrimaryEmailExists();
+        }
+
         if (
           account.emails
             .map((accountEmail) => accountEmail.email)
