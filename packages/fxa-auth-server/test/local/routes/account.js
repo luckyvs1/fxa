@@ -3106,3 +3106,53 @@ describe('/account', () => {
     });
   });
 });
+
+describe('/account/metrics/ecosystemAnonId', () => {
+  const uid = uuid.v4('binary').toString('hex');
+  const ecosystemAnonId = 'bowl of oranges';
+  const mockLog = mocks.mockLog();
+  const mockDB = mocks.mockDB();
+
+  const mockRequest = mocks.mockRequest({
+    log: mockLog,
+    credentials: {
+      scope: ['profile:ecosystem_anon_id'],
+      uid,
+    },
+    payload: {
+      ecosystemAnonId,
+    },
+  });
+
+  const accountRoutes = makeRoutes({
+    db: mockDB,
+    log: mockLog,
+  });
+
+  const route = getRoute(accountRoutes, '/account/metrics/ecosystemAnonId');
+
+  it('runs, informing the auth db of the new anon id', () => {
+    return runTest(route, mockRequest, (result) => {
+      const updateEcosystemAnonId = mockDB.updateEcosystemAnonId;
+      assert.deepEqual(result, {});
+      assert.equal(mockLog.begin.callCount, 1);
+      assert.equal(updateEcosystemAnonId.callCount, 1);
+      assert.equal(updateEcosystemAnonId.args[0][0], uid);
+      assert.equal(updateEcosystemAnonId.args[0][1], ecosystemAnonId);
+    });
+  });
+
+  it('throws when valid scope is not present', async () => {
+    mockRequest.auth.credentials.scope = [];
+
+    let failed = false;
+    try {
+      await runTest(route, mockRequest, () => {});
+    } catch (err) {
+      failed = true;
+      assert.equal(err.errno, error.ERRNO.INVALID_SCOPES);
+    }
+
+    assert.isTrue(failed);
+  });
+});
