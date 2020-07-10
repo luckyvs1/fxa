@@ -951,7 +951,7 @@ module.exports = (
         },
         response: {
           schema: {
-            ecosystemAnonId: isA.string().optional(),
+            ecosystemAnonId: isA.string().optional().allow(null),
             email: isA.string().optional(),
             locale: isA.string().optional().allow(null),
             authenticationMethods: isA
